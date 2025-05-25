@@ -18,11 +18,11 @@ function App() {
 
     return (
         <GoogleOAuthProvider clientId={clientId}>
-            {calendarContent ?
+            {calendarContent === null ?
                 <div className="min-h-screen bg-gradient-to-r flex items-center justify-center">
                     <LoginButton setCalendarContent={setCalendarContent}/>
                 </div> :
-               <Rent2PlayTabs/>
+                <Rent2PlayTabs calendarContent={calendarContent}/>
             }
         </GoogleOAuthProvider>
     );

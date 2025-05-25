@@ -5,7 +5,11 @@ import {toast} from "sonner";
 import {InventoryOverview} from "@/app/features/inventory/InventoryOverview";
 import {useProductStore, useSkusStore} from "@/lib/store";
 
-export function Rent2PlayTabs() {
+interface Rent2PlayTabsProps {
+    calendarContent: any;
+}
+
+export function Rent2PlayTabs({calendarContent}: Rent2PlayTabsProps) {
     const {products, setProducts} = useProductStore();
     const {skusToFilter} = useSkusStore();
 
@@ -23,6 +27,7 @@ export function Rent2PlayTabs() {
     }, [setProducts]);
 
 
+    console.log(calendarContent)
     return (
         <Tabs defaultValue="tabs" className="items-center justify-center pt-10">
             <TabsList>
@@ -33,7 +38,7 @@ export function Rent2PlayTabs() {
                 Here will come the Calendar
             </TabsContent>
             <TabsContent value="inventory">
-                {products.length > 0 ? <InventoryOverview products={products} /> : <p>Loading...</p>}
+                {products.length > 0 ? <InventoryOverview products={products}/> : <p>Loading...</p>}
             </TabsContent>
         </Tabs>
     );

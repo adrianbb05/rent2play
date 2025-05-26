@@ -29,15 +29,15 @@ export interface DefaultReminder {
     minutes: number
 }
 
-export interface ConferenceProperties {
+interface ConferenceProperties {
     allowedConferenceSolutionTypes: string[]
 }
 
-export interface NotificationSettings {
+interface NotificationSettings {
     notifications: Notification[]
 }
 
-export interface Notification {
+interface Notification {
     type: string
     method: string
 }

@@ -17,6 +17,8 @@ export function DateNavigationButtons({setDateToDisplay, view}: DateNavigationBu
                 newDate.setDate(newDate.getDate() - 7)
             } else if (view === "2-weeks") {
                 newDate.setDate(newDate.getDate() - 14)
+            } else if (view === "year") {
+                newDate.setFullYear(newDate.getFullYear() - 1)
             }
             return newDate
         })
@@ -31,6 +33,8 @@ export function DateNavigationButtons({setDateToDisplay, view}: DateNavigationBu
                 newDate.setDate(newDate.getDate() + 7)
             } else if (view === "2-weeks") {
                 newDate.setDate(newDate.getDate() + 14)
+            } else if (view === "year") {
+                newDate.setFullYear(newDate.getFullYear() + 1)
             }
             return newDate
         })
@@ -38,13 +42,22 @@ export function DateNavigationButtons({setDateToDisplay, view}: DateNavigationBu
 
     return (
         <div>
-            <Button onClick={handleSubtractDate}>
+            <Button
+                variant="outline"
+                onClick={handleSubtractDate}
+            >
                 {"<"}
             </Button>
-            <Button onClick={() => setDateToDisplay(new Date())}>
+            <Button
+                variant="outline"
+                onClick={() => setDateToDisplay(new Date())}
+            >
                 Today
             </Button>
-            <Button onClick={handleIncreaseDate}>
+            <Button
+                variant="outline"
+                onClick={handleIncreaseDate}
+            >
                 {">"}
             </Button>
         </div>

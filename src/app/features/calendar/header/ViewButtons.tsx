@@ -1,38 +1,48 @@
-import {Button} from "@/components/ui/button";
 import type {Dispatch, SetStateAction} from "react";
 import type {CalendarView} from "@/app/features/types/calendarTypes";
+import {ToggleGroup, ToggleGroupItem} from "@/components/ui/toggle-group";
 
 interface ViewButtonsProps {
     setView: Dispatch<SetStateAction<CalendarView>>
-    view: CalendarView
 }
 
-export function ViewButtons({setView, view}: ViewButtonsProps) {
+export function ViewButtons({setView}: ViewButtonsProps) {
     return (
         <div>
-            <Button
-                variant={view === "week" ? "default" : "outline"}
-                onClick={() => setView("week")}
-            >
-                Week
-            </Button>
-            <Button
-                variant={view === "2-weeks" ? "default" : "outline"}
-                onClick={() => setView("2-weeks")}>
-               Bi-Weekly
-            </Button>
-            <Button
-                variant={view === "month" ? "default" : "outline"}
-                onClick={() => setView("month")}
-            >
-                Month
-            </Button>
-            <Button
-                variant={view === "year" ? "default" : "outline"}
-                onClick={() => setView("year")}
-            >
-               Year
-            </Button>
+            <ToggleGroup type="single">
+                <ToggleGroupItem
+                    variant="outline"
+                    value="week"
+                    className="px-4 py-2"
+                    onClick={() => setView("week")}
+                >
+                    Week
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                    variant="outline"
+                    value="2-weeks"
+                    className="px-4 py-2"
+                    onClick={() => setView("2-weeks")}
+                >
+                    Bi-Weekly
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                    variant="outline"
+                    value="month"
+                    className="px-4 py-2"
+                    onClick={() => setView("month")}
+                >
+                    Month
+                </ToggleGroupItem>
+                <ToggleGroupItem
+                    variant="outline"
+                    value="year"
+                    className="px-4 py-2"
+                    onClick={() => setView("year")}
+                >
+                    Year
+                </ToggleGroupItem>
+            </ToggleGroup>
         </div>
     )
 }

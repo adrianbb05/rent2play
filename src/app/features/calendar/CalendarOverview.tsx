@@ -14,18 +14,22 @@ export function CalendarOverview({calendarContent}: CalendarOverviewProps) {
     const [view, setView] = useState<CalendarView>("month")
 
     return (
-        <div className="flex flex-col gap-5">
-            <CalendarButtons
-                dateToDisplay={dateToDisplay}
-                setDateToDisplay={setDateToDisplay}
-                setView={setView}
-                view={view}
-            />
-            <Calendar
-                view={view}
-                dateToDisplay={dateToDisplay}
-                calendarContent={calendarContent}
-            />
+        <div className="flex flex-col gap-5 h-screen">
+            <div className="sticky top-0 bg-white z-10">
+                <CalendarButtons
+                    dateToDisplay={dateToDisplay}
+                    setDateToDisplay={setDateToDisplay}
+                    setView={setView}
+                    view={view}
+                />
+            </div>
+            <div className="flex-grow overflow-y-auto">
+                <Calendar
+                    view={view}
+                    dateToDisplay={dateToDisplay}
+                    calendarContent={calendarContent}
+                />
+            </div>
         </div>
     )
 

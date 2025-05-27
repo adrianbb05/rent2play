@@ -19,7 +19,7 @@ export function CalendarButtons({dateToDisplay, setDateToDisplay, setView, view}
             <h2 className="text-center">
                 {`${month} ${fullYear}`}
             </h2>
-            <ViewButtons setView={setView} view={view}/>
+            <ViewButtons setView={setView}/>
         </div>
     )
 }

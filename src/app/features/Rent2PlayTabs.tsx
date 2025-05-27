@@ -5,9 +5,10 @@ import {toast} from "sonner";
 import {InventoryOverview} from "@/app/features/inventory/InventoryOverview";
 import {useProductStore, useSkusStore} from "@/lib/store";
 import {CalendarOverview} from "@/app/features/calendar/CalendarOverview";
+import type {CalendarEventResponse} from "@/app/hooks/types/EventTypes";
 
 interface Rent2PlayTabsProps {
-    calendarContent: any;
+    calendarContent: CalendarEventResponse;
 }
 
 export function Rent2PlayTabs({calendarContent}: Rent2PlayTabsProps) {
@@ -28,9 +29,8 @@ export function Rent2PlayTabs({calendarContent}: Rent2PlayTabsProps) {
     }, [setProducts, skusToFilter]);
 
 
-    console.log(calendarContent)
     return (
-        <Tabs defaultValue="tabs" className="items-center justify-center pt-10">
+        <Tabs defaultValue="tabs" className="items-center justify-center pt-10 sticky top-0">
             <TabsList>
                 <TabsTrigger value="calendar">Calendar</TabsTrigger>
                 <TabsTrigger value="inventory">Inventory</TabsTrigger>

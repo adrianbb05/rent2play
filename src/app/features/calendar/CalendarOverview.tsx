@@ -1,23 +1,32 @@
 import type {CalendarEventResponse} from "@/app/hooks/types/EventTypes";
+import {useState} from "react";
+import {CalendarButtons} from "@/app/features/calendar/header/CalendarButtons";
+import type {CalendarView} from "@/app/features/types/calendarTypes";
+import {Calendar} from "@/app/features/calendar/body/Calendar";
+
 
 interface CalendarOverviewProps {
     calendarContent: CalendarEventResponse
 }
+
 export function CalendarOverview({calendarContent}: CalendarOverviewProps) {
+    const [dateToDisplay, setDateToDisplay] = useState<Date>(new Date())
+    const [view, setView] = useState<CalendarView>("month")
+
     return (
-        <div className="p-4">
-            <h1 className="text-2xl font-bold mb-4">Calendar Overview</h1>
-            <div className="space-y-4">
-                {calendarContent.items.map((event) => (
-                    <div key={event.id} className="p-4 border rounded-lg shadow-sm">
-                        <h2 className="text-xl font-semibold">Summary: {event.summary}</h2>
-                        <p>Description: {event.description}</p>
-                        <p className="text-sm text-gray-500">Start: {event.start.date}</p>
-                        <p className="text-sm text-gray-500">End: {event.end.date}</p>
-                    </div>
-                ))}
-            </div>
+        <div className="flex flex-col gap-5">
+            <CalendarButtons
+                dateToDisplay={dateToDisplay}
+                setDateToDisplay={setDateToDisplay}
+                setView={setView}
+                view={view}
+            />
+            <Calendar
+                view={view}
+                dateToDisplay={dateToDisplay}
+                calendarContent={calendarContent}
+            />
         </div>
-    );
+    )
 
 }

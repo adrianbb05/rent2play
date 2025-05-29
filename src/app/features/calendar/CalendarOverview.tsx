@@ -12,9 +12,10 @@ interface CalendarOverviewProps {
 export function CalendarOverview({calendarContent}: CalendarOverviewProps) {
     const [dateToDisplay, setDateToDisplay] = useState<Date>(new Date())
     const [view, setView] = useState<CalendarView>("month")
+    const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     return (
-        <div className="flex flex-col gap-5 h-screen">
+        <div className="flex flex-col gap-5 h-screen w-screen">
             <div className="sticky top-0 bg-white z-10">
                 <CalendarButtons
                     dateToDisplay={dateToDisplay}
@@ -22,6 +23,13 @@ export function CalendarOverview({calendarContent}: CalendarOverviewProps) {
                     setView={setView}
                     view={view}
                 />
+            </div>
+            <div className="grid grid-cols-7 text-center font-bold bg-gray-200 py-2">
+                {daysOfWeek.map((day, index) => (
+                    <div key={index} className="px-2">
+                        {day}
+                    </div>
+                ))}
             </div>
             <div className="flex-grow overflow-y-auto">
                 <Calendar

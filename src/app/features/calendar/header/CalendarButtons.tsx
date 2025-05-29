@@ -11,13 +11,14 @@ interface CalendarButtonsProps {
 }
 
 export function CalendarButtons({dateToDisplay, setDateToDisplay, setView, view}: CalendarButtonsProps) {
-    const month = dateToDisplay.toLocaleString("default", {month: "long"});
-    const fullYear = dateToDisplay.getFullYear();
+    const month = dateToDisplay.toLocaleString("default", {month: "long"})
+    const fullYear = dateToDisplay.getFullYear()
+
     return (
         <div className="grid grid-cols-3 items-center">
             <DateNavigationButtons setDateToDisplay={setDateToDisplay} view={view}/>
             <h2 className="text-center">
-                {`${month} ${fullYear}`}
+                {view === "year" ? fullYear : `${month} ${fullYear}`}
             </h2>
             <ViewButtons setView={setView}/>
         </div>

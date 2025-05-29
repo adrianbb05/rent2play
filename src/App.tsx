@@ -7,7 +7,7 @@ import type {CalendarEventResponse} from "@/app/hooks/types/EventTypes";
 
 const clientId = import.meta.env.VITE_CLIENT_ID;
 
-function App() {
+export default function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [calendarContent, setCalendarContent] = useState<CalendarEventResponse | null>(null)
 
@@ -16,6 +16,7 @@ function App() {
             <Login setIsAuthenticated={setIsAuthenticated}/>
         );
     }
+
 
     return (
         <GoogleOAuthProvider clientId={clientId}>
@@ -26,7 +27,5 @@ function App() {
                 <Rent2PlayTabs calendarContent={calendarContent}/>
             }
         </GoogleOAuthProvider>
-    );
+    )
 }
-
-export default App;

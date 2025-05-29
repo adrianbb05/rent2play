@@ -1,3 +1,5 @@
+import {DayComponent} from "@/app/features/calendar/body/components/DayComponent";
+
 interface MonthComponentProps {
     dateToDisplay: Date
 }
@@ -10,21 +12,20 @@ export function MonthComponent({dateToDisplay}: MonthComponentProps) {
     const daysInMonth = new Date(year, month + 1, 0).getDate()
 
     const days = Array.from({length: daysInMonth}, (_, i) => new Date(year, month, i + 1))
+    const monthName = dateToDisplay.toLocaleString("default", {month: "long"})
 
     return (
-        <div className="grid grid-cols-7 gap-2">
-            {Array.from({length: firstDayOfMonth}).map((_, index) => (
-                <div key={`empty-${index}`} />
-            ))}
+        <div>
+            <h3 className="text-center font-bold mb-4">{monthName}</h3>
+            <div className="grid grid-cols-7 gap-0">
+                {Array.from({length: firstDayOfMonth}).map((_, index) => (
+                    <div key={`empty-${index}`}/>
+                ))}
 
-            {days.map((day, index) => (
-                <div
-                    key={index}
-                    className="w-24 h-24 border border-gray-300 flex items-center justify-center bg-gray-100"
-                >
-                    {day.getDate()}
-                </div>
-            ))}
+                {days.map((day, index) => (
+                    <DayComponent key={month + index} date={day}/>
+                ))}
+            </div>
         </div>
     )
 }

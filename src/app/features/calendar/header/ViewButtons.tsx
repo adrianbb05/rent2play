@@ -8,7 +8,7 @@ interface ViewButtonsProps {
 
 export function ViewButtons({setView}: ViewButtonsProps) {
     return (
-        <div>
+        <div className="flex items-center justify-center">
             <ToggleGroup type="single">
                 <ToggleGroupItem
                     variant="outline"

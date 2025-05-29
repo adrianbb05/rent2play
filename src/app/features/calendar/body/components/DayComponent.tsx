@@ -1,14 +1,23 @@
-import type {CalendarView} from "@/app/features/types/calendarTypes";
-
 interface DayComponentProps {
     date: Date
-    view: CalendarView
 }
 
-export function DayComponent({date, view}: DayComponentProps) {
+export function DayComponent({date}: DayComponentProps) {
+    const isToday = new Date().toDateString() === date.toDateString();
+    const dayOfWeek = (date.getDay() + 6) % 7; // Adjust to start on Monday
+
     return (
-        <div className="w-24 h-24 border border-gray-300 flex items-center justify-center bg-gray-100">
-            {view === "year" ? date.toLocaleString("default", {month: "short"}) : date.getDate()}
+        <div
+            className="w-full h-40 border border-gray-300 relative"
+            style={{
+                gridColumnStart: dayOfWeek + 1,
+            }}
+        >
+            <div
+                className={`absolute top-2 left-2 w-8 h-8 flex items-center justify-center rounded-full border border-gray-300 ${isToday ? "bg-blue-500 text-white font-bold" : "bg-white text-black"}`}
+            >
+                {date.getDate()}
+            </div>
         </div>
-    )
+    );
 }

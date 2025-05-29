@@ -38,3 +38,9 @@ export function generateDays(dateToDisplay: Date, view: CalendarView) {
 
     return days
 }
+
+// skus to filter
+// products / product contains title
+// events / events with titles // quantity on titles (when no quantity set the amount = 1)
+// days to display
+// from days to display + name * quantity => reverse rentals to display disponibility

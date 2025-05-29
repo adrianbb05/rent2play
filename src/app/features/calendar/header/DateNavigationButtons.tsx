@@ -41,7 +41,7 @@ export function DateNavigationButtons({setDateToDisplay, view}: DateNavigationBu
     }
 
     return (
-        <div>
+        <div className="flex items-center justify-center">
             <Button
                 variant="outline"
                 onClick={handleSubtractDate}

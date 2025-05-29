@@ -8,25 +8,25 @@ import {CalendarOverview} from "@/app/features/calendar/CalendarOverview";
 import type {CalendarEventResponse} from "@/app/hooks/types/EventTypes";
 
 interface Rent2PlayTabsProps {
-    calendarContent: CalendarEventResponse;
+    calendarContent: CalendarEventResponse
 }
 
 export function Rent2PlayTabs({calendarContent}: Rent2PlayTabsProps) {
-    const {products, setProducts} = useProductStore();
-    const {skusToFilter} = useSkusStore();
+    const {products, setProducts} = useProductStore()
+    const {skusToFilter} = useSkusStore()
 
     useEffect(() => {
         const fetchInventory = async () => {
             try {
-                const res = await getClubsFromWeb(skusToFilter);
-                setProducts(res);
-                toast.success("Inventory loaded");
+                const res = await getClubsFromWeb(skusToFilter)
+                setProducts(res)
+                toast.success("Inventory loaded")
             } catch {
-                toast.error("Error when loading inventory");
+                toast.error("Error when loading inventory")
             }
         };
-        fetchInventory();
-    }, [setProducts, skusToFilter]);
+        fetchInventory()
+    }, [setProducts, skusToFilter])
 
 
     return (

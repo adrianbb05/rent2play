@@ -1,5 +1,6 @@
 import {useGoogleLogin} from '@react-oauth/google';
 import axios from 'axios';
+import { FcGoogle } from 'react-icons/fc';
 import type {Dispatch, SetStateAction} from "react";
 import type {Calendar, CalendarListResponse} from "@/app/hooks/types/CalendarTypes";
 import type {CalendarEventResponse} from "@/app/hooks/types/EventTypes";
@@ -25,7 +26,15 @@ export function LoginButton({setCalendarContent}: LoginButtonProps) {
         onError: () => console.error('Login Failed'),
     });
 
-    return <button onClick={() => login()}>Sign in with Google</button>
+    return (
+        <button
+            onClick={() => login()}
+            className="flex items-center gap-2 px-4 py-2 border border-gray-300 rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-200"
+        >
+            <FcGoogle className="text-xl" />
+            <span>Sign in with Google</span>
+        </button>
+    );
 }
 
 async function fetchCalendarsList(accessToken: string) {

@@ -36,7 +36,11 @@ export function Rent2PlayTabs({calendarContent}: Rent2PlayTabsProps) {
                 <TabsTrigger value="inventory">Inventory</TabsTrigger>
             </TabsList>
             <TabsContent value="calendar">
-                <CalendarOverview calendarContent={calendarContent}/>
+                <CalendarOverview
+                    calendarContent={calendarContent}
+                    products={products}
+                    skusToFilter={skusToFilter}
+                />
             </TabsContent>
             <TabsContent value="inventory">
                 {products.length > 0 ? <InventoryOverview products={products}/> : <p>Loading...</p>}

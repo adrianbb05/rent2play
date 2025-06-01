@@ -3,13 +3,16 @@ import {useState} from "react";
 import {CalendarButtons} from "@/app/features/calendar/header/CalendarButtons";
 import type {CalendarView} from "@/app/features/types/calendarTypes";
 import {Calendar} from "@/app/features/calendar/body/Calendar";
+import type {Product} from "@/app/features/types/inventory";
 
 
 interface CalendarOverviewProps {
     calendarContent: CalendarEventResponse
+    products: Product[]
+    skusToFilter: string[]
 }
 
-export function CalendarOverview({calendarContent}: CalendarOverviewProps) {
+export function CalendarOverview({calendarContent, products, skusToFilter}: CalendarOverviewProps) {
     const [dateToDisplay, setDateToDisplay] = useState<Date>(new Date())
     const [view, setView] = useState<CalendarView>("month")
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
@@ -35,7 +38,9 @@ export function CalendarOverview({calendarContent}: CalendarOverviewProps) {
                 <Calendar
                     view={view}
                     dateToDisplay={dateToDisplay}
-                    calendarContent={calendarContent}
+                    calendarEvents={calendarContent}
+                    products={products}
+                    skusToFilter={skusToFilter}
                 />
             </div>
         </div>

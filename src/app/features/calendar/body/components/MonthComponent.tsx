@@ -1,10 +1,12 @@
 import {DayComponent} from "@/app/features/calendar/body/components/DayComponent";
+import type {CalendarEntry} from "@/app/features/services/calender/calendarService";
 
 interface MonthComponentProps {
     dateToDisplay: Date
+    calendarEntries: CalendarEntry[]
 }
 
-export function MonthComponent({dateToDisplay}: MonthComponentProps) {
+export function MonthComponent({dateToDisplay, calendarEntries}: MonthComponentProps) {
     const year = dateToDisplay.getFullYear()
     const month = dateToDisplay.getMonth()
 
@@ -21,9 +23,8 @@ export function MonthComponent({dateToDisplay}: MonthComponentProps) {
                 {Array.from({length: firstDayOfMonth}).map((_, index) => (
                     <div key={`empty-${index}`}/>
                 ))}
-
-                {days.map((day, index) => (
-                    <DayComponent key={month + index} date={day}/>
+                {days.map((day) => (
+                    <DayComponent key={day.getTime()} date={day} calendarEntries={calendarEntries}/>
                 ))}
             </div>
         </div>

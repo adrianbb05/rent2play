@@ -1,14 +1,21 @@
+import type {CalendarEntry} from "@/app/features/services/calender/calendarService";
+import {SingleEvent} from "@/app/features/calendar/body/components/SingleEvent";
+
 interface DayComponentProps {
-    date: Date
+    date: Date;
+    calendarEntries: CalendarEntry[]
 }
 
-export function DayComponent({date}: DayComponentProps) {
+export function DayComponent({date, calendarEntries}: DayComponentProps) {
     const isToday = new Date().toDateString() === date.toDateString();
     const dayOfWeek = (date.getDay() + 6) % 7; // Adjust to start on Monday
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+    const matchingEntry = calendarEntries.find(entry => entry.date === formattedDate);
 
     return (
         <div
-            className="w-full h-40 border border-gray-300 relative"
+            className="w-full h-fit border border-gray-300 relative"
             style={{
                 gridColumnStart: dayOfWeek + 1,
             }}
@@ -18,6 +25,7 @@ export function DayComponent({date}: DayComponentProps) {
             >
                 {date.getDate()}
             </div>
+            {matchingEntry && <SingleEvent matchingEntry={matchingEntry}/>}
         </div>
     );
 }

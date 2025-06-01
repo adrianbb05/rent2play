@@ -33,6 +33,7 @@ export interface Item {
     attendees?: Attendee[]
     reminders: Reminders
     eventType: string
+    quantity ?: number
 }
 
 export interface Creator {

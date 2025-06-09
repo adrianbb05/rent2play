@@ -21,6 +21,7 @@ export function LoginButton({setCalendarContent}: LoginButtonProps) {
             const filteredRent2PlayCalendar: Calendar = filterCalendars(calendarsResponse.data)
             const calendarResponse = await fetchCalendarById(filteredRent2PlayCalendar, accessToken)
             const calendarEventResponse = calendarResponse.data as CalendarEventResponse;
+            console.log(calendarEventResponse)
             setCalendarContent(calendarEventResponse)
         },
         onError: () => console.error('Login Failed'),
@@ -56,7 +57,7 @@ async function fetchCalendarById(calendar: Calendar, accessToken: string) {
                 Authorization: `Bearer ${accessToken}`,
             },
         }
-    )
+    );
 }
 
 function filterCalendars(calendars: CalendarListResponse) {

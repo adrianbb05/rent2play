@@ -40,7 +40,6 @@ export function generateDays(dateToDisplay: Date, view: CalendarView) {
         }
     }
 
-    console.log(days)
     return days
 }
 
@@ -64,7 +63,12 @@ export function clubsAvailability(
     );
     const events = calendarEvents.items
     const clubsEvents = events.filter(event => {
-        const clubName = event.summary.split("|")[1].trim()
+        const clubNameAndQuantity = event.summary.split("|")[1].trim()
+        const clubNameWithoutQuantity = clubNameAndQuantity.split("Quantity :")[0].trim()
+        let clubName = clubNameWithoutQuantity
+        if (clubNameWithoutQuantity.charAt(clubNameWithoutQuantity.length - 1) === "-") {
+            clubName = clubNameWithoutQuantity.slice(0, -1)
+        }
         return products.some(product => product.title === clubName)
     })
 
@@ -79,10 +83,11 @@ export function clubsAvailability(
 
         return {
             ...event,
-            name: splitSummary[0],
+            name: content[0],
             quantity: quantity
         } as ExtendedItem
     })
+
 
     return calculateAvailableProducts(products, quantityClubEvents, formattedDaysToDisplay)
 }
@@ -93,20 +98,26 @@ function calculateAvailableProducts(
     formattedDaysToDisplay: string[]
 ): CalendarEntry[] {
     return formattedDaysToDisplay.map(date => {
-        const dailyReservations = quantityClubEvents.filter(event => event.start.date === date)
+        const dailyReservations = quantityClubEvents.filter(event => {
+            const eventStartDate = new Date(event.start.date);
+            const eventEndDate = new Date(event.end.date);
+            const currentDate = new Date(date);
+
+            return currentDate >= eventStartDate && currentDate <= eventEndDate;
+        });
 
         const availableProducts = products.map(product => {
             const productReservations = dailyReservations.filter(event => {
-                return event.name === product.title
+                return event.name.trim().toLowerCase() === product.title.trim().toLowerCase()
             })
 
-            const totalReservedQuantity = productReservations.reduce((sum, event) => sum + (event.quantity || 1), 0)
-
+            const totalReservedQuantity = productReservations.reduce((sum, event) => sum + event.quantity, 0)
+            
             return {
                 ...product,
-                availableQuantity: Math.max(product.quantity - totalReservedQuantity, 1),
-            };
-        });
+                availableQuantity: Math.max(product.quantity - totalReservedQuantity, 0),
+            }
+        })
 
         return {
             date,

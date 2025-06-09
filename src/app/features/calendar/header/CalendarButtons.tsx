@@ -15,7 +15,7 @@ export function CalendarButtons({dateToDisplay, setDateToDisplay, setView, view}
     const fullYear = dateToDisplay.getFullYear()
 
     return (
-        <div className="grid grid-cols-3 items-center">
+        <div className="grid grid-cols-3 items-center sticky top-0 bg-white z-10">
             <DateNavigationButtons setDateToDisplay={setDateToDisplay} view={view}/>
             <h2 className="text-center">
                 {view === "year" ? fullYear : `${month} ${fullYear}`}

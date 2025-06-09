@@ -7,8 +7,12 @@ import type {Product, WebInventoryResponse} from "@/app/features/types/inventory
 export async function getClubsFromWeb(skusToFilter: string[]): Promise<Product[]> {
     const rent2playProductsUrl = "https://rent2play.golf/products.json";
     const response = await fetch(rent2playProductsUrl)
-    const webProducts = await response.json() as WebInventoryResponse
-    return filterInventory(skusToFilter, webProducts)
+    const webProducts = await response.json()
+    const webProductsWithDefaultQuantity = {
+        ...webProducts,
+        quantity: 1
+    } as WebInventoryResponse
+    return filterInventory(skusToFilter, webProductsWithDefaultQuantity)
 
 }
 

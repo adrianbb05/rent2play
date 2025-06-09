@@ -19,14 +19,12 @@ export function CalendarOverview({calendarContent, products, skusToFilter}: Cale
 
     return (
         <div className="flex flex-col gap-5 h-screen w-screen">
-            <div className="sticky top-0 bg-white z-10">
-                <CalendarButtons
-                    dateToDisplay={dateToDisplay}
-                    setDateToDisplay={setDateToDisplay}
-                    setView={setView}
-                    view={view}
-                />
-            </div>
+            <CalendarButtons
+                dateToDisplay={dateToDisplay}
+                setDateToDisplay={setDateToDisplay}
+                setView={setView}
+                view={view}
+            />
             <div className="grid grid-cols-7 text-center font-bold bg-gray-200 py-2">
                 {daysOfWeek.map((day, index) => (
                     <div key={index} className="px-2">

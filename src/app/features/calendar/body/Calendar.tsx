@@ -14,9 +14,9 @@ interface CalendarProps {
 }
 
 export function Calendar({view, dateToDisplay, calendarEvents, products}: CalendarProps) {
-    const daysToDisplay = generateDays(dateToDisplay, view)
-    const calendarEntries = clubsAvailability(products, calendarEvents, daysToDisplay)
     if (view !== "year") {
+        const daysToDisplay = generateDays(dateToDisplay, view)
+        const calendarEntries = clubsAvailability(products, calendarEvents, daysToDisplay)
         return (
             <div className="grid grid-cols-7 gap-0 min-w-full">
                 {daysToDisplay.map((day, index) => (
@@ -33,9 +33,11 @@ export function Calendar({view, dateToDisplay, calendarEvents, products}: Calend
             <div className="grid grid-cols-1 gap-4 min-2-full">
                 {Array.from({length: 12}).map((_, monthIndex) => {
                     const monthDate = new Date(dateToDisplay.getFullYear(), monthIndex, 1)
+                    const daysToGenerate = generateDays(monthDate, view)
+                    const calendarEntries = clubsAvailability(products, calendarEvents, daysToGenerate)
                     return <MonthComponent
                         key={monthIndex}
-                        dateToDisplay={monthDate}
+                        monthDate={monthDate}
                         calendarEntries={calendarEntries}
                     />
                 })}

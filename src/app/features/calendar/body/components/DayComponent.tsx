@@ -9,13 +9,17 @@ interface DayComponentProps {
 export function DayComponent({date, calendarEntries}: DayComponentProps) {
     const isToday = new Date().toDateString() === date.toDateString();
     const dayOfWeek = (date.getDay() + 6) % 7; // Adjust to start on Monday
-    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+    const fullYear = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const formattedDate = `${fullYear}-${month}-${day}`;
 
     const matchingEntry = calendarEntries.find(entry => entry.date === formattedDate);
 
     return (
         <div
-            className="w-full h-fit border border-gray-300 relative"
+            className="w-full h-80 border border-gray-300 relative"
             style={{
                 gridColumnStart: dayOfWeek + 1,
             }}

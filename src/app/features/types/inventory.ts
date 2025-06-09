@@ -16,7 +16,7 @@ export interface Product {
     variants: Variant[]
     images: Image[]
     options: Option[]
-    quantity?: number
+    quantity: number
 }
 
 export interface Variant {

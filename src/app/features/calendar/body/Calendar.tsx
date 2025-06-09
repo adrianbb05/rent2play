@@ -1,6 +1,6 @@
 import type {CalendarView} from "@/app/features/types/calendarTypes";
 import type {CalendarEventResponse} from "@/app/hooks/types/EventTypes";
-import {generateDays, clubsAvailability} from "../../services/calender/calendarService";
+import {generateDays, clubsAvailability} from "@/app/features/services/calendar/calendarService";
 import {DayComponent} from "@/app/features/calendar/body/components/DayComponent";
 import {MonthComponent} from "@/app/features/calendar/body/components/MonthComponent";
 import type {Product} from "@/app/features/types/inventory";

@@ -1,4 +1,4 @@
-import type {CalendarEntry} from "@/app/features/services/calender/calendarService";
+import type {CalendarEntry} from "@/app/features/services/calendar/calendarService";
 
 interface EventsOverviewProps {
     matchingEntry: CalendarEntry

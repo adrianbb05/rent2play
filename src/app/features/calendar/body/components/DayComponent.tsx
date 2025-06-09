@@ -1,4 +1,4 @@
-import type {CalendarEntry} from "@/app/features/services/calender/calendarService";
+import type {CalendarEntry} from "@/app/features/services/calendar/calendarService";
 import {SingleEvent} from "@/app/features/calendar/body/components/SingleEvent";
 
 interface DayComponentProps {

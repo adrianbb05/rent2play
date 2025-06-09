@@ -1,5 +1,5 @@
 import {DayComponent} from "@/app/features/calendar/body/components/DayComponent";
-import type {CalendarEntry} from "@/app/features/services/calender/calendarService";
+import type {CalendarEntry} from "@/app/features/services/calendar/calendarService";
 
 interface MonthComponentProps {
     monthDate: Date

@@ -19,14 +19,20 @@ export function Rent2PlayTabs({calendarContent}: Rent2PlayTabsProps) {
         const fetchInventory = async () => {
             try {
                 const res = await getClubsFromWeb(skusToFilter)
-                setProducts(res)
-                toast.success("Inventory loaded")
+                const existingProductIds = products.map((product) => product.id)
+                const newProducts = res.filter((product) => !existingProductIds.includes(product.id))
+                if (newProducts.length > 0) {
+                    setProducts([...products, ...newProducts])
+                    toast.success("Inventory updated with new products")
+                } else {
+                    toast.info("No new products to add")
+                }
             } catch {
                 toast.error("Error when loading inventory")
             }
         };
         fetchInventory()
-    }, [setProducts, skusToFilter])
+    }, [setProducts, skusToFilter, products])
 
 
     return (

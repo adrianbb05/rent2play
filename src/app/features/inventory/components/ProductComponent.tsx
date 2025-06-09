@@ -10,8 +10,8 @@ interface ProductComponentProps {
 }
 
 export function ProductComponent({product}: ProductComponentProps) {
-    const [quantity, setQuantity] = useState(product.quantity ?? 1)
     const {updateProductQuantity} = useProductStore()
+    const [quantity, setQuantity] = useState(product.quantity)
 
     const incrementQuantity = () => {
         const newQuantity = quantity + 1

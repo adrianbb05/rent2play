@@ -18,7 +18,7 @@ export function MonthComponent({monthDate, calendarEntries}: MonthComponentProps
 
     return (
         <div>
-            <h3 className="text-center font-bold mb-4">{monthName}</h3>
+            <h3 className="text-center font-bold mb-4 sticky top-0 z-10 bg-white">{monthName}</h3>
             <div className="grid grid-cols-7 gap-0">
                 {Array.from({length: firstDayOfMonth}).map((_, index) => (
                     <div key={`empty-${index}`}/>

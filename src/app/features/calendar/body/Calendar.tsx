@@ -4,6 +4,7 @@ import {generateDays, clubsAvailability} from "@/app/features/services/calendar/
 import {DayComponent} from "@/app/features/calendar/body/components/DayComponent";
 import {MonthComponent} from "@/app/features/calendar/body/components/MonthComponent";
 import type {Product} from "@/app/features/types/inventory";
+import type {Filters} from "@/app/features/calendar/header/FilterButtons";
 
 interface CalendarProps {
     view: CalendarView
@@ -11,12 +12,13 @@ interface CalendarProps {
     calendarEvents: CalendarEventResponse
     skusToFilter: string[]
     products: Product[]
+    filters: Filters
 }
 
-export function Calendar({view, dateToDisplay, calendarEvents, products}: CalendarProps) {
+export function Calendar({view, dateToDisplay, calendarEvents, products, filters}: CalendarProps) {
     if (view !== "year") {
         const daysToDisplay = generateDays(dateToDisplay, view)
-        const calendarEntries = clubsAvailability(products, calendarEvents, daysToDisplay)
+        const calendarEntries = clubsAvailability(products, calendarEvents, daysToDisplay, filters)
         return (
             <div className="grid grid-cols-7 gap-0 min-w-full">
                 {daysToDisplay.map((day, index) => (
@@ -34,7 +36,7 @@ export function Calendar({view, dateToDisplay, calendarEvents, products}: Calend
                 {Array.from({length: 12}).map((_, monthIndex) => {
                     const monthDate = new Date(dateToDisplay.getFullYear(), monthIndex, 1)
                     const daysToGenerate = generateDays(monthDate, view)
-                    const calendarEntries = clubsAvailability(products, calendarEvents, daysToGenerate)
+                    const calendarEntries = clubsAvailability(products, calendarEvents, daysToGenerate, filters)
                     return <MonthComponent
                         key={monthIndex}
                         monthDate={monthDate}

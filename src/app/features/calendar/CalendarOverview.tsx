@@ -4,6 +4,7 @@ import {CalendarButtons} from "@/app/features/calendar/header/CalendarButtons";
 import type {CalendarView} from "@/app/features/types/calendarTypes";
 import {Calendar} from "@/app/features/calendar/body/Calendar";
 import type {Product} from "@/app/features/types/inventory";
+import type {Filters} from "@/app/features/calendar/header/FilterButtons";
 
 
 interface CalendarOverviewProps {
@@ -15,6 +16,7 @@ interface CalendarOverviewProps {
 export function CalendarOverview({calendarContent, products, skusToFilter}: CalendarOverviewProps) {
     const [dateToDisplay, setDateToDisplay] = useState<Date>(new Date())
     const [view, setView] = useState<CalendarView>("month")
+    const [filters, setFilters] = useState<Filters>({brand: "none", gender: "none", material: "none", hand: "none"});
     const daysOfWeek = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     return (
@@ -24,6 +26,7 @@ export function CalendarOverview({calendarContent, products, skusToFilter}: Cale
                 setDateToDisplay={setDateToDisplay}
                 setView={setView}
                 view={view}
+                setFilters={setFilters}
             />
             <div className="grid grid-cols-7 text-center font-bold bg-gray-200 py-2">
                 {daysOfWeek.map((day, index) => (
@@ -39,6 +42,7 @@ export function CalendarOverview({calendarContent, products, skusToFilter}: Cale
                     calendarEvents={calendarContent}
                     products={products}
                     skusToFilter={skusToFilter}
+                    filters={filters}
                 />
             </div>
         </div>

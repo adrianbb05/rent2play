@@ -17,9 +17,9 @@ export function CalendarButtons({dateToDisplay, setDateToDisplay, setView, view,
     const fullYear = dateToDisplay.getFullYear()
 
     return (
-        <div className="grid grid-cols-4 items-center sticky top-0 bg-white z-10">
+        <div className="flex flex-wrap items-center justify-between gap-2 sticky top-0 bg-white z-10 px-4 py-2">
             <DateNavigationButtons setDateToDisplay={setDateToDisplay} view={view}/>
-            <h2 className="text-center">
+            <h2 className="text-center flex-1 min-w-[120px]">
                 {view === "year" ? fullYear : `${month} ${fullYear}`}
             </h2>
             <FilterButtons setFilters={setFilters}/>

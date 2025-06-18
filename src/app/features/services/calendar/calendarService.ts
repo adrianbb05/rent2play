@@ -48,6 +48,7 @@ interface AvailableProducts {
     title: string
     availableQuantity: number
 }
+
 export interface CalendarEntry {
     date: string
     availableProducts: AvailableProducts[]
@@ -58,118 +59,143 @@ export interface ExtendedItem extends Item {
     quantity: number
 }
 
-export function filterClubsToDisplay(
+function parseEventDetails(summary: string): Filters {
+    const [, details] = summary.split("|").map(part => part.trim())
+    const [brandModel, attributes] = details.split("(").map(part => part.trim())
+    const [brand] = brandModel.split(" ")
+    const [gender, material, hand] = attributes.replace(")", "").split(" - ").map(attr => attr.trim())
+
+    return {
+        brand: brand.trim(),
+        gender: gender.trim(),
+        material: material.trim(),
+        hand: hand.trim(),
+    }
+}
+
+function parseProductDetails(title: string): Filters {
+    const [brandModel, attributes] = title.split("(").map(part => part.trim())
+    const [brand] = brandModel.split(" ")
+    const [gender, material, hand] = attributes.replace(")", "").split(" - ").map(attr => attr.trim())
+
+    return {
+        brand: brand.trim(),
+        gender: gender.trim(),
+        material: material.trim(),
+        hand: hand.trim(),
+    }
+}
+
+function isMatchingFilter(
+    item: Item | Product,
+    filters: Filters,
+): boolean {
+    let details: Filters
+    if ("summary" in item) {
+        details = parseEventDetails((item as Item).summary)
+    } else {
+        details = parseProductDetails((item as Product).title)
+    }
+
+    const activeFilterKeys = Object.keys(filters).filter(
+        key => filters[key as keyof Filters] !== "none"
+    )
+
+    if (activeFilterKeys.length === 0) {
+        return true // All items stay in the list
+    } else if (activeFilterKeys.length === 1) {
+        const key = activeFilterKeys[0] as keyof Filters
+        return filters[key] === details[key]
+    } else {
+        return activeFilterKeys.every(
+            key => filters[key as keyof Filters] === details[key as keyof typeof details]
+        )
+    }
+}
+
+function filterClubsToDisplay(
     products: Product[],
     calendarEvents: CalendarEventResponse,
     filters: Filters
 ): Item[] {
-    function clubDetails(event: Item): Filters {
-        const [, details] = event.summary.split("|").map(part => part.trim())
-        const [brandModel, attributes] = details.split("(").map(part => part.trim())
-        const [brand,] = brandModel.split(" ")
-        const [gender, material, hand] = attributes.replace(")", "").split(" - ").map(attr => attr.trim())
-
-        return {
-            brand: brand.trim(),
-            gender: gender.trim(),
-            material: material.trim(),
-            hand: hand.trim(),
-        }
+    const isMatchingProduct = (event: Item) => {
+        const clubNameAndQuantity = event.summary.split("|")[1].trim()
+        const clubNameWithoutQuantity = clubNameAndQuantity.split("Quantity :")[0].trim()
+        const clubName = clubNameWithoutQuantity.endsWith("-")
+            ? clubNameWithoutQuantity.slice(0, -1)
+            : clubNameWithoutQuantity
+        return products.some(product => product.title === clubName)
     }
 
     return calendarEvents.items
-        .filter(event => {
-            const clubNameAndQuantity = event.summary.split("|")[1].trim()
-            const clubNameWithoutQuantity = clubNameAndQuantity.split("Quantity :")[0].trim()
-            let clubName = clubNameWithoutQuantity
-            if (clubNameWithoutQuantity.charAt(clubNameWithoutQuantity.length - 1) === "-") {
-                clubName = clubNameWithoutQuantity.slice(0, -1)
-            }
-            return products.some(product => product.title === clubName)
-        })
-        .filter(event => {
-            const details = clubDetails(event)
-            // TODO: fix filters and fix frontend
-            return Object.keys(filters).some(key =>
-                filters[key as keyof Filters] === details[key as keyof typeof details]
-            )
-        })
+        .filter(isMatchingProduct)
+        .filter(event => isMatchingFilter(event, filters))
 }
 
-export function clubsAvailability(
+function clubsAvailability(
     products: Product[],
     calendarEvents: CalendarEventResponse,
     daysToDisplay: Date[],
     filters: Filters
 ) {
-    const formattedDaysToDisplay = daysToDisplay.map(date =>
+    const formattedDays = daysToDisplay.map(date =>
         `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`
-    );
+    )
 
-    const clubsToDisplay = filterClubsToDisplay(products, calendarEvents, filters)
+    const clubs = filterClubsToDisplay(products, calendarEvents, filters)
 
-    const quantityClubEvents = clubsToDisplay.map(event => {
+    const quantityClubEvents = clubs.map(event => {
         const splitSummary = event.summary.split("|")[1]
-        const content = splitSummary.split("Quantity :")
-        const clubQuantity = content[1]
-        let quantity = 1
-        if (clubQuantity) {
-            quantity = parseInt(content[1].trim())
-        }
+        const [name, quantityStr] = splitSummary.split("Quantity :")
+        const quantity = quantityStr ? parseInt(quantityStr.trim()) : 1
 
         return {
             ...event,
-            name: content[0],
+            name: name,
             quantity: quantity
         } as ExtendedItem
     })
 
+    const filteredProducts = products
+        .filter(product => isMatchingFilter(product, filters))
 
-    return calculateAvailableProducts(products, quantityClubEvents, formattedDaysToDisplay)
+    return calculateAvailableProducts(filteredProducts, quantityClubEvents, formattedDays)
 }
 
 function calculateAvailableProducts(
     products: Product[],
     quantityClubEvents: ExtendedItem[],
-    formattedDaysToDisplay: string[]
+    formattedDays: string[]
 ): CalendarEntry[] {
-    return formattedDaysToDisplay.map(date => {
+    return formattedDays.map(date => {
         const dailyReservations = quantityClubEvents.filter(event => {
-            const eventStartDate = new Date(event.start.date);
-            const eventEndDate = new Date(event.end.date);
-            const currentDate = new Date(date);
+            const eventStart = new Date(event.start.date)
+            const eventEnd = new Date(event.end.date)
+            const current = new Date(date)
+            return current >= eventStart && current <= eventEnd
+        })
 
-            return currentDate >= eventStartDate && currentDate <= eventEndDate;
-        });
 
-        const uniqueProductNames = Array.from(
-            new Set(dailyReservations.map(event => event.name.trim().toLowerCase()))
-        )
-
-        const availableProducts = uniqueProductNames.map(productName => {
-            const product = products.find(
-                p => p.title.trim().toLowerCase() === productName
-            );
-            if (!product) {
-                return null
-            }
-
-            const productReservations = dailyReservations.filter(
-                event => event.name.trim().toLowerCase() === productName
+        const availableProducts = products.map(product => {
+            const reserved = dailyReservations.filter(event =>
+                event.name.trim().toLowerCase() === product.title.trim().toLowerCase()
             )
-            const totalReservedQuantity = productReservations.reduce(
-                (sum, event) => sum + event.quantity, 0
-            )
-
+            const totalReserved = reserved.reduce((sum, event) => sum + event.quantity, 0)
             return {
                 title: product.title,
-                availableQuantity: Math.max(product.quantity - totalReservedQuantity, 0),
+                availableQuantity: Math.max(product.quantity - totalReserved, 0),
             }
-        }).filter(e => e !== null);
+        })
 
         return {
-            date,
-            availableProducts,
+            date: date,
+            availableProducts: availableProducts,
         }
     })
+}
+
+export {
+    filterClubsToDisplay,
+    clubsAvailability,
+    calculateAvailableProducts
 }

@@ -10,11 +10,49 @@ export interface Filters {
 }
 
 interface FilterButtonsProps {
-    setFilters: Dispatch<SetStateAction<Filters>>;
+    setFilters: Dispatch<SetStateAction<Filters>>
 }
 
-export function FilterButtons({setFilters}: FilterButtonsProps) {
+const filterOptions = [
+    {
+        key: "brand" as keyof Filters,
+        placeholder: "Brand",
+        options: [
+            { value: "none", label: "None" },
+            { value: "Callaway", label: "Callaway Rouge" },
+            { value: "TaylorMade", label: "TaylorMade" },
+        ],
+    },
+    {
+        key: "gender" as keyof Filters,
+        placeholder: "Gender",
+        options: [
+            { value: "none", label: "None" },
+            { value: "Men", label: "Men" },
+            { value: "Women", label: "Women" },
+        ],
+    },
+    {
+        key: "material" as keyof Filters,
+        placeholder: "Material",
+        options: [
+            { value: "none", label: "None" },
+            { value: "Steel", label: "Steel" },
+            { value: "Graphite", label: "Graphite" },
+        ],
+    },
+    {
+        key: "hand" as keyof Filters,
+        placeholder: "Hand",
+        options: [
+            { value: "none", label: "None" },
+            { value: "Left Hand", label: "Left" },
+            { value: "Right Hand", label: "Right" },
+        ],
+    },
+]
 
+export function FilterButtons({ setFilters }: FilterButtonsProps) {
     const handleChange = (key: keyof Filters, value: string) => {
         setFilters(prevFilters => ({
             ...prevFilters,
@@ -24,46 +62,20 @@ export function FilterButtons({setFilters}: FilterButtonsProps) {
 
     return (
         <div className="flex flex-row gap-2">
-            <Select onValueChange={(value: string) => handleChange("brand", value)}>
-                <SelectTrigger className="w-fit">
-                    <SelectValue placeholder="Brand"/>
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    <SelectItem value="Callaway">Callaway Rouge</SelectItem>
-                    <SelectItem value="TaylorMade">TaylorMade</SelectItem>
-                </SelectContent>
-            </Select>
-            <Select onValueChange={(value: string) => handleChange("gender", value)}>
-                <SelectTrigger className="w-fit">
-                    <SelectValue placeholder="Gender"/>
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    <SelectItem value="Men">Men</SelectItem>
-                    <SelectItem value="Women">Women</SelectItem>
-                </SelectContent>
-            </Select>
-            <Select onValueChange={(value: string) => handleChange("material", value)}>
-                <SelectTrigger className="w-fit">
-                    <SelectValue placeholder="Material"/>
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    <SelectItem value="Steel">Steel</SelectItem>
-                    <SelectItem value="Graphite">Graphite</SelectItem>
-                </SelectContent>
-            </Select>
-            <Select onValueChange={(value: string) => handleChange("hand", value)}>
-                <SelectTrigger className="w-fit">
-                    <SelectValue placeholder="Hand"/>
-                </SelectTrigger>
-                <SelectContent>
-                    <SelectItem value="none">None</SelectItem>
-                    <SelectItem value="Left Hand">Left</SelectItem>
-                    <SelectItem value="Right Hand">Right</SelectItem>
-                </SelectContent>
-            </Select>
+            {filterOptions.map(({ key, placeholder, options }) => (
+                <Select key={key} onValueChange={(value: string) => handleChange(key, value)}>
+                    <SelectTrigger className="w-fit">
+                        <SelectValue placeholder={placeholder} />
+                    </SelectTrigger>
+                    <SelectContent>
+                        {options.map(opt => (
+                            <SelectItem key={opt.value} value={opt.value}>
+                                {opt.label}
+                            </SelectItem>
+                        ))}
+                    </SelectContent>
+                </Select>
+            ))}
         </div>
     )
 }

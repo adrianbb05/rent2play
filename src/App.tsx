@@ -11,12 +11,12 @@ export default function App() {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [calendarContent, setCalendarContent] = useState<CalendarEventResponse | null>(null)
 
+
     if (!isAuthenticated) {
         return (
             <Login setIsAuthenticated={setIsAuthenticated}/>
         );
     }
-
 
     return (
         <GoogleOAuthProvider clientId={clientId}>

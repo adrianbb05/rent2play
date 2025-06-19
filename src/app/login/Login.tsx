@@ -1,5 +1,4 @@
 import {useState} from "react";
-import {toast} from "sonner";
 
 interface Props {
     setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -12,11 +11,8 @@ export function Login({setIsAuthenticated}: Props) {
     const handleLogin = () => {
         if (password === predefinedPassword) {
             setIsAuthenticated(true);
-            toast.success("Login successful!");
-        } else {
-            toast.error("Incorrect password!");
         }
-    };
+    }
 
     return (
         <div className="min-h-screen bg-gradient-to-r flex items-center justify-center">

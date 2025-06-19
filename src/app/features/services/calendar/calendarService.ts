@@ -102,7 +102,7 @@ function isMatchingFilter(
     )
 
     if (activeFilterKeys.length === 0) {
-        return true // All items stay in the list
+        return true
     } else if (activeFilterKeys.length === 1) {
         const key = activeFilterKeys[0] as keyof Filters
         return filters[key] === details[key]

@@ -1,3 +1,4 @@
+import {useEffect} from 'react';
 import {useGoogleLogin} from '@react-oauth/google';
 import axios from 'axios';
 import { FcGoogle } from 'react-icons/fc';
@@ -7,24 +8,33 @@ import type {CalendarEventResponse} from "@/app/hooks/types/EventTypes";
 
 const scope = import.meta.env.VITE_GOOGLE_SCOPE;
 const rent2PlayCalendarSummary = import.meta.env.VITE_RENT2PLAY_CALENDAR_SUMMARY;
+const LOCAL_STORAGE_TOKEN_KEY = 'google_access_token';
 
 interface LoginButtonProps {
     setCalendarContent: Dispatch<SetStateAction<CalendarEventResponse | null>>;
 }
 
 export function LoginButton({setCalendarContent}: LoginButtonProps) {
+    useEffect(() => {
+        const accessToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
+        if (accessToken) {
+            fetchCalendarData(accessToken, setCalendarContent);
+        }
+    }, [setCalendarContent]);
+
     const login = useGoogleLogin({
         scope: scope,
         onSuccess: async (tokenResponse) => {
             const accessToken = tokenResponse.access_token;
-            const calendarsResponse = await fetchCalendarsList(accessToken)
-            const filteredRent2PlayCalendar: Calendar = filterCalendars(calendarsResponse.data)
-            const calendarResponse = await fetchCalendarById(filteredRent2PlayCalendar, accessToken)
-            const calendarEventResponse = calendarResponse.data as CalendarEventResponse;
-            setCalendarContent(calendarEventResponse)
+            localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, accessToken);
+            fetchCalendarData(accessToken, setCalendarContent);
         },
         onError: () => console.error('Login Failed'),
     });
+
+    if (localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY)) {
+        return null;
+    }
 
     return (
         <button
@@ -35,6 +45,20 @@ export function LoginButton({setCalendarContent}: LoginButtonProps) {
             <span>Sign in with Google</span>
         </button>
     );
+}
+
+async function fetchCalendarData(accessToken: string, setCalendarContent: Dispatch<SetStateAction<CalendarEventResponse | null>>) {
+    try {
+        const calendarsResponse = await fetchCalendarsList(accessToken);
+        const filteredRent2PlayCalendar: Calendar = filterCalendars(calendarsResponse.data);
+        const calendarResponse = await fetchCalendarById(filteredRent2PlayCalendar, accessToken);
+        const calendarEventResponse = calendarResponse.data as CalendarEventResponse;
+        setCalendarContent(calendarEventResponse);
+    } catch (error) {
+        localStorage.removeItem(LOCAL_STORAGE_TOKEN_KEY);
+        setCalendarContent(null);
+        console.error('Failed to fetch calendar data', error);
+    }
 }
 
 async function fetchCalendarsList(accessToken: string) {

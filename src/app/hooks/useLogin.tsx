@@ -5,10 +5,12 @@ import { FcGoogle } from 'react-icons/fc';
 import type {Dispatch, SetStateAction} from "react";
 import type {Calendar, CalendarListResponse} from "@/app/hooks/types/CalendarTypes";
 import type {CalendarEventResponse} from "@/app/hooks/types/EventTypes";
+import CryptoJS from 'crypto-js';
 
 const scope = import.meta.env.VITE_GOOGLE_SCOPE;
 const rent2PlayCalendarSummary = import.meta.env.VITE_RENT2PLAY_CALENDAR_SUMMARY;
-const LOCAL_STORAGE_TOKEN_KEY = 'google_access_token';
+const LOCAL_STORAGE_TOKEN_KEY = 'encrypted_token';
+const googleSecretEncryptionKey = import.meta.env.VITE_GOOGLE_SECRET_ENCRYPTION_KEY;
 
 interface LoginButtonProps {
     setCalendarContent: Dispatch<SetStateAction<CalendarEventResponse | null>>;
@@ -26,7 +28,9 @@ export function LoginButton({setCalendarContent}: LoginButtonProps) {
         scope: scope,
         onSuccess: async (tokenResponse) => {
             const accessToken = tokenResponse.access_token;
-            localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, accessToken);
+            // Encrypt the access token before saving
+            const encryptedToken = CryptoJS.AES.encrypt(accessToken, googleSecretEncryptionKey).toString();
+            localStorage.setItem(LOCAL_STORAGE_TOKEN_KEY, encryptedToken);
             fetchCalendarData(accessToken, setCalendarContent);
         },
         onError: () => console.error('Login Failed'),

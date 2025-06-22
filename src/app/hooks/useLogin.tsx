@@ -20,7 +20,8 @@ export function LoginButton({setCalendarContent}: LoginButtonProps) {
     useEffect(() => {
         const accessToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
         if (accessToken) {
-            fetchCalendarData(accessToken, setCalendarContent);
+            const decryptedToken = CryptoJS.AES.decrypt(accessToken, googleSecretEncryptionKey).toString(CryptoJS.enc.Utf8);
+            fetchCalendarData(decryptedToken, setCalendarContent);
         }
     }, [setCalendarContent]);
 

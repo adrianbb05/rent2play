@@ -18,9 +18,9 @@ interface LoginButtonProps {
 
 export function LoginButton({setCalendarContent}: LoginButtonProps) {
     useEffect(() => {
-        const accessToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
-        if (accessToken) {
-            const decryptedToken = CryptoJS.AES.decrypt(accessToken, googleSecretEncryptionKey).toString(CryptoJS.enc.Utf8);
+        const encryptedToken = localStorage.getItem(LOCAL_STORAGE_TOKEN_KEY);
+        if (encryptedToken) {
+            const decryptedToken = CryptoJS.AES.decrypt(encryptedToken, googleSecretEncryptionKey).toString(CryptoJS.enc.Utf8);
             fetchCalendarData(decryptedToken, setCalendarContent);
         }
     }, [setCalendarContent]);

@@ -45,7 +45,7 @@ function clubsAvailability(
             quantity: quantity
         } as ExtendedItem;
     });
-
+    console.log(quantityClubEvents)
     const filteredProducts = products
         .filter(product => isMatchingFilter(product, filters));
 
@@ -62,7 +62,7 @@ function calculateAvailableProducts(
             const eventStart = new Date(event.start.date)
             const eventEnd = new Date(event.end.date)
             const current = new Date(date)
-            return current >= eventStart && current <= eventEnd
+            return current >= eventStart && current < eventEnd
         })
 
         const availableProducts = products.map(product => {

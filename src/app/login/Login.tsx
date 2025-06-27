@@ -1,4 +1,5 @@
 import {useState} from "react";
+import { toast } from "sonner";
 
 interface Props {
     setIsAuthenticated: (isAuthenticated: boolean) => void;
@@ -11,6 +12,8 @@ export function Login({setIsAuthenticated}: Props) {
     const handleLogin = () => {
         if (password === predefinedPassword) {
             setIsAuthenticated(true);
+        } else {
+            toast.error("Incorrect password. Please try again.");
         }
     }
 
